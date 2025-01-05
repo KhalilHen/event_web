@@ -1,8 +1,36 @@
+'use client';
+import receiveFormData from './create_event';
+import { useState } from 'react';
+
 export default function CreateEvent() {
+  const [formData, setFormData] = useState({
+    eventName: '',
+    eventDescription: '',
+    startDate: '',
+    endDate: '',
+    eventTime: '',
+    eventLocation: '',
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    receiveFormData(formData);
+  };
+
   return (
     <div className='max-w-lg mx-auto p-4'>
       <h2 className='text-2xl font-bold mb-4'>Create Event</h2>
-      <form className='space-y-4 '>
+      <form className='space-y-4' onSubmit={handleSubmit}>
         <div>
           <label
             htmlFor='eventName'
@@ -15,7 +43,9 @@ export default function CreateEvent() {
             id='eventName'
             name='eventName'
             required
-            className='mt-1 block w-full border text-black  border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
+            value={formData.eventName}
+            onChange={handleChange}
+            className='mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
           />
         </div>
 
@@ -30,52 +60,27 @@ export default function CreateEvent() {
             id='eventDescription'
             name='eventDescription'
             required
+            value={formData.eventDescription}
+            onChange={handleChange}
             className='mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
           ></textarea>
         </div>
 
-        {/* <div>
-          <label
-            htmlFor='status'
-            className='block text-sm font-medium text-white'
-          >
-            Status:
-          </label>
-          <textarea
-            id='status'
-            name='status'
-            // required
-            className='mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
-          ></textarea>
-        </div>
-        <div>
-          <label
-            htmlFor='Status'
-            className='block text-sm font-medium text-white'
-          >
-            Status:
-          </label>
-          <input
-            type='enum'
-            id='status'
-            name='status'
-            // required
-            className='mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
-          />
-        </div> */}
         <div>
           <label
             htmlFor='start-date'
             className='block text-sm font-medium text-white'
           >
-            start-date:
+            Start Date:
           </label>
           <input
             type='date'
             id='start-date'
-            name='start-date'
+            name='startDate'
             required
-            className='mt-1 block w-full  text-black border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
+            value={formData.startDate}
+            onChange={handleChange}
+            className='mt-1 block w-full text-black border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
           />
         </div>
         <div>
@@ -83,14 +88,16 @@ export default function CreateEvent() {
             htmlFor='end-date'
             className='block text-sm font-medium text-white'
           >
-            end-date:
+            End Date:
           </label>
           <input
             type='date'
             id='end-date'
-            name='end-date'
+            name='endDate'
             required
-            className='mt-1 block w-full  text-black border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
+            value={formData.endDate}
+            onChange={handleChange}
+            className='mt-1 block w-full text-black border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
           />
         </div>
         <div>
@@ -105,13 +112,15 @@ export default function CreateEvent() {
             id='eventTime'
             name='eventTime'
             required
-            className='mt-1 block w-full  text-black border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
+            value={formData.eventTime}
+            onChange={handleChange}
+            className='mt-1 block w-full text-black border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
           />
         </div>
         <div>
           <label
             htmlFor='eventLocation'
-            className='block text-sm font-medium text-white '
+            className='block text-sm font-medium text-white'
           >
             Event Location:
           </label>
@@ -120,6 +129,8 @@ export default function CreateEvent() {
             id='eventLocation'
             name='eventLocation'
             required
+            value={formData.eventLocation}
+            onChange={handleChange}
             className='mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
           />
         </div>
