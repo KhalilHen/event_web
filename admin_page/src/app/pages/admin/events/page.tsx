@@ -2,8 +2,14 @@
 // import retrieveEvents(0 from './retrieve_events.tsx';
 import retrieveEvents from './retrieve_events';
 import { EventsCard } from './event_card';
+// import CreateEvent from './create_event';
+import { useRouter } from 'next/navigation';
 
 export default function Event() {
+  const router = useRouter();
+  const handleRouting = () => {
+    router.push('/pages/admin/events/create');
+  };
   return (
     <div>
       {/* Appbar container */}
@@ -25,6 +31,13 @@ export default function Event() {
             </div>
             <div className='flex flex-col justify-between h-52'>
               <h1> Create new event</h1>
+              <button
+                type='submit'
+                onClick={handleRouting}
+                className='w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500'
+              >
+                <span> Create! </span>{' '}
+              </button>
             </div>
             <div className='flex flex-col justify-between h-52'>
               <h1>Event category</h1>
