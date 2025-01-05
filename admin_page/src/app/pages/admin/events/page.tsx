@@ -1,6 +1,7 @@
-'use client'
+'use client';
 // import retrieveEvents(0 from './retrieve_events.tsx';
 import retrieveEvents from './retrieve_events';
+import { EventsCard } from './event_card';
 
 export default function Event() {
   return (
@@ -19,7 +20,7 @@ export default function Event() {
           >
             <div className='flex flex-col justify-between h-52'>
               <h1>Current events</h1>
-
+              <EventsCard />
               {/* Here a for each for all existing events */}
             </div>
             <div className='flex flex-col justify-between h-52'>
