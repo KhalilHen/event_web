@@ -1,4 +1,13 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+
 export default function AdminPage() {
+  const router = useRouter();
+  const handleViewEvents = () => {
+    router.push('/pages/admin/events');
+  };
+
   return (
     <div>
       {/* Appbar container */}
@@ -17,43 +26,25 @@ export default function AdminPage() {
           <div className='flex flex-col justify-between h-52'>
             <h1>Events</h1>
 
-            <button>
+            <button
+              type='submit'
+              className=' w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500'
+              onClick={handleViewEvents}
+            >
               <span>View events</span>
             </button>
           </div>
           <div className='flex flex-col justify-between h-52'>
             <h1>Event category</h1>
-            <button className='flex flex-col items-center mr-2.5 p-2.5 text-lg'>
+            <button
+              type='submit'
+              className='w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            >
               <span>Event category</span>
             </button>
           </div>
         </div>
       </div>
     </div>
-
-    // <div
-    //   style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
-    // >
-    //   <button
-    //     style={{
-    //       className: 'flex flex-col items-center mr-2.5 p-2.5 text-lg',
-    //     }}
-    //   >
-    //     <span>Column 1</span>
-    //     <span>Text 1</span>
-    //   </button>
-    //   <button
-    //     style={{
-    //       display: 'flex',
-    //       flexDirection: 'column',
-    //       alignItems: 'center',
-    //       padding: '10px 20px',
-    //       fontSize: '16px',
-    //     }}
-    //   >
-    //     <span>Column 2</span>
-    //     <span>Text 2</span>
-    //   </button>
-    // </div>
   );
 }
