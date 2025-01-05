@@ -1,9 +1,19 @@
 'use client';
 import { useState } from 'react';
+// import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+
+// import  { AdminPage} from  './pages/admin/page';0
 // import { supabase } from '../lib/supabaseClient';
 // import { supabase } from '@lib/supabaseClient';
 import { supabase } from '../../lib/supabaseClient';
 export default function Home() {
+  const router = useRouter();
+
+  const navigateToAdmin = () => {
+    router.push('/admin');
+  };
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -21,6 +31,10 @@ export default function Home() {
     } else {
       setErrorMessage(null);
       alert('Login successful!');
+      // router.push('/admin_page/admin');
+      // router.push('/pages/admin');
+      // router.push('/admin');
+      router.push('/pages/admin');
     }
   };
 
@@ -63,6 +77,12 @@ export default function Home() {
               Login
             </button>
           </form>
+
+          {/* Too test whether the navigation works */}
+          <button
+            onClick={navigateToAdmin}
+            className='text-blue-500 hover:underline focus:outline-none'
+          ></button>
         </div>
       </main>
     </div>
