@@ -3,9 +3,9 @@ import { supabase } from '../../../../../../lib/supabaseClient';
 interface FormData {
   eventName: string;
   eventDescription: string;
-  startDate: string;
-  endDate: string;
-  eventTime: string;
+  startDate: Date;
+  endDate: Date;
+  // eventTime: string;
   eventLocation: string;
 }
 
@@ -18,7 +18,7 @@ export default async function receiveFormData(
       description: formData.eventDescription,
       start_date: formData.startDate,
       end_date: formData.endDate,
-      time: formData.eventTime,
+      // time: formData.eventTime,
       location: formData.eventLocation,
     },
   ]);

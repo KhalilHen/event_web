@@ -24,7 +24,13 @@ export default function CreateEvent() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    receiveFormData(formData);
+    const formattedData = {
+      ...formData,
+      startDate: new Date(formData.startDate),
+      endDate: new Date(formData.endDate),
+      // eventTime: parseFloat(formData.eventTime),
+    };
+    receiveFormData(formattedData);
   };
 
   return (
