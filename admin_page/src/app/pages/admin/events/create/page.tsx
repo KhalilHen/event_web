@@ -1,4 +1,5 @@
 'use client';
+// TODO Fix later that time and date are converted correctly
 import receiveFormData from './create_event';
 import { useState } from 'react';
 
@@ -26,11 +27,16 @@ export default function CreateEvent() {
     e.preventDefault();
     const formattedData = {
       ...formData,
-      startDate: new Date(formData.startDate),
-      endDate: new Date(formData.endDate),
+      // startDate: new Date(formData.startDate),
+      startDate: new Date(formData.startDate).toISOString(), // Converts to ISO string
+      // endDate: new Date(formData.endDate),
+      endDate: new Date(formData.endDate).toISOString(), // Converts to ISO string
+      eventTime: formData.eventTime + ':00', // Append seconds if needed
+
       // eventTime: parseFloat(formData.eventTime),
     };
     receiveFormData(formattedData);
+    // receiveFormData(formattedData as FormData);
   };
 
   return (
@@ -113,15 +119,16 @@ export default function CreateEvent() {
           >
             Event Time:
           </label>
-          <input
-            type='time'
-            id='eventTime'
-            name='eventTime'
-            required
-            value={formData.eventTime}
-            onChange={handleChange}
-            className='mt-1 block w-full text-black border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
-          />
+
+          {/* <input
+              type='time'
+              id='eventTime'
+              name='eventTime'
+              required
+              value={formData.eventTime}
+              onChange={handleChange}
+              className='mt-1 block w-full text-black border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
+            /> */}
         </div>
         <div>
           <label
