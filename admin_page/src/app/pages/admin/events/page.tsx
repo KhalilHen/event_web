@@ -1,4 +1,5 @@
 'use client';
+import CategoryEvent from './category_event';
 import { EventsCard } from './event_card';
 // import CreateEvent from './create_event';
 import { useRouter } from 'next/navigation';
@@ -50,6 +51,11 @@ export default function Event() {
               >
                 <span>Event category</span>
               </button>
+            </div>
+            <div className='flex flex-col justify-between h-52'>
+              <h1>Current category &apos;s </h1>
+
+              <CategoryEvent />
             </div>
           </div>
         </div>
