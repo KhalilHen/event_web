@@ -1,6 +1,4 @@
 'use client';
-// import retrieveEvents(0 from './retrieve_events.tsx';
-import retrieveEvents from './retrieve_events';
 import { EventsCard } from './event_card';
 // import CreateEvent from './create_event';
 import { useRouter } from 'next/navigation';
@@ -9,6 +7,10 @@ export default function Event() {
   const router = useRouter();
   const handleRouting = () => {
     router.push('/pages/admin/events/create');
+  };
+
+  const createCategory = () => {
+    router.push('/pages/admin/event-category');
   };
   return (
     <div>
@@ -43,7 +45,7 @@ export default function Event() {
               <h1>Event category</h1>
               <button
                 type='submit'
-                onClick={retrieveEvents}
+                onClick={createCategory}
                 className='w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500'
               >
                 <span>Event category</span>
