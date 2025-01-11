@@ -9,11 +9,6 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabaseClient';
 export default function Home() {
   const router = useRouter();
-
-  const navigateToAdmin = () => {
-    router.push('/admin');
-  };
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -21,20 +16,39 @@ export default function Home() {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data: authData, error: authError } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      setErrorMessage(error.message);
+    if (authError) {
+      setErrorMessage(authError.message);
+      return;
+    }
+
+    if (authData.user) {
+      const { data: userData, error: userError } = await supabase
+        .from('persons')
+        .select('role')
+        .eq('email', email)
+        .single();
+
+      if (userError) {
+        setErrorMessage(userError.message);
+        return;
+      }
+
+      if (userData.role === 'admin') {
+        // Redirect to admin page if role is 'admin'
+        setErrorMessage(null);
+        alert('Login successful!');
+        router.push('/pages/admin');
+      } else {
+        setErrorMessage('You do not have the required admin role.');
+      }
     } else {
-      setErrorMessage(null);
-      alert('Login successful!');
-      // router.push('/admin_page/admin');
-      // router.push('/pages/admin');
-      // router.push('/admin');
-      router.push('/pages/admin');
+      setErrorMessage('Unable to fetch user data.');
     }
   };
 
@@ -77,12 +91,6 @@ export default function Home() {
               Login
             </button>
           </form>
-
-          {/* Too test whether the navigation works */}
-          <button
-            onClick={navigateToAdmin}
-            className='text-blue-500 hover:underline focus:outline-none'
-          ></button>
         </div>
       </main>
     </div>
