@@ -1,7 +1,7 @@
 'use client';
 // TODO Fix later that time and date are converted correctly
 import { useState } from 'react';
-import createCategory from './create_category';
+import { createCategory } from './create_category';
 export default function CategoryForm() {
   const [formData, setFormData] = useState({
     categoryTitle: '',
