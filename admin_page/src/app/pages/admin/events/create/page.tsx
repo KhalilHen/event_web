@@ -1,7 +1,8 @@
 'use client';
 // TODO Fix later that time and date are converted correctly
 import receiveFormData from './create_event';
-import { useState } from 'react';
+import retrieveCategories from './retrieve_category';
+import { useEffect, useState } from 'react';
 
 export default function CreateEvent() {
   const [formData, setFormData] = useState({
@@ -11,10 +12,27 @@ export default function CreateEvent() {
     endDate: '',
     eventTime: '',
     eventLocation: '',
+    eventCategory: '',
   });
 
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      const data = await retrieveCategories();
+      if (data) {
+        setCategories(
+          data.map((category: { title: string }) => category.title)
+        );
+      }
+    }
+    fetchCategories();
+  }, []);
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -59,6 +77,30 @@ export default function CreateEvent() {
             onChange={handleChange}
             className='mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
           />
+        </div>
+
+        <div>
+          <label
+            htmlFor='eventCategory'
+            className='block text-sm font-medium text-white'
+          >
+            Event Category:
+          </label>
+          <select
+            id='eventCategory'
+            name='eventCategory'
+            required
+            value={formData.eventCategory}
+            onChange={handleChange}
+            className='mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
+          >
+            <option value=''>Select a category</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>
