@@ -63,7 +63,9 @@ export function EventsCard() {
           <CardContent>
             <Typography gutterBottom variant='h5' component='div'>
               {event.title}
+
             </Typography>
+           
             <Typography variant='body2' color='text.secondary'>
               {event.description}
             </Typography>

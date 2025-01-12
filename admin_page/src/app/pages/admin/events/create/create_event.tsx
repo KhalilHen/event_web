@@ -11,6 +11,7 @@ interface FormData {
   eventLocation: string;
   eventCategory: string;
   eventStatus: string;
+  eventHighLight: boolean;
 }
 
 export default async function receiveFormData(
@@ -21,23 +22,20 @@ export default async function receiveFormData(
   
   // Ensure startDate and endDate are ISO 8601 strings
   let imageUrl: string | null = null;
-  if(imageFile) {
-
+  if (imageFile) {
     const safeEventName = formData.eventName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
     const fileName = `${safeEventName}_${imageFile.name}`;
     const { data: uploadData, error: uploadError } = await supabase.storage
-    .from('event_images') 
-    .upload(fileName, imageFile);
+      .from('event_images')
+      .upload(fileName, imageFile);
 
-  if (uploadError) {
-    console.error('Error uploading image:', uploadError);
-    return;
-  }  else if(uploadData) {
-
-    const {data: publicUrlData} = supabase.storage.from('event_images').getPublicUrl(uploadData.path);
-    imageUrl = publicUrlData?.publicUrl ?? null;
-  }
-
+    if (uploadError) {
+      console.error('Error uploading image:', uploadError);
+      return;
+    } else if (uploadData) {
+      const { data: publicUrlData } = supabase.storage.from('event_images').getPublicUrl(uploadData.path);
+      imageUrl = publicUrlData?.publicUrl ?? null;
+    }
   }
 
   const startDate =
@@ -59,6 +57,7 @@ export default async function receiveFormData(
       category: formData.eventCategory,
       status: formData.eventStatus,
       image_url: imageUrl , // Can be null
+      high_light: formData.eventHighLight,
 
     },
   ]);

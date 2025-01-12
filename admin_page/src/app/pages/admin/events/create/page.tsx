@@ -15,6 +15,7 @@ export default function CreateEvent() {
     eventLocation: '',
     eventCategory: '',
     eventStatus: EventStatus.Draft,
+    eventHighLight:  false,
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [categories, setCategories] = useState<string[]>([]);
@@ -84,6 +85,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       eventLocation: formData.eventLocation,
       eventCategory: formData.eventCategory,
       eventStatus: formData.eventStatus,
+      eventHighLight: formData.eventHighLight,
     };
 
     await receiveFormData(formattedData, imageFile);
@@ -97,6 +99,8 @@ const handleSubmit = async (e: React.FormEvent) => {
       eventLocation: '',
       eventCategory: '',
       eventStatus: EventStatus.Draft,
+      eventHighLight: false,
+      // highLight:  , 
     });
     setImageFile(null);
     
@@ -268,6 +272,28 @@ const handleSubmit = async (e: React.FormEvent) => {
               </option>
             ))}
           </select>
+        <div>
+          <label
+            htmlFor='highLight'
+            className='block text-sm font-small text-white'
+          >
+            Highlight Event:
+          </label>
+          <input
+            type='checkbox'
+            id='highLight'
+            name='eventHighLight'
+            checked={formData.eventHighLight}
+
+            onChange={(e) =>
+              setFormData((prevState) => ({
+                ...prevState,
+                eventHighLight: e.target.checked,
+              }))
+            }
+            className='mt-1 block text-black border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
+          />
+        </div>
         </div>
 
         <button
