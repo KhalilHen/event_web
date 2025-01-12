@@ -3,6 +3,7 @@
 import receiveFormData from './create_event';
 import retrieveCategories from './retrieve_category';
 import { useEffect, useState } from 'react';
+import { EventStatus } from './retrieve_status';
 
 export default function CreateEvent() {
   const [formData, setFormData] = useState({
@@ -13,7 +14,7 @@ export default function CreateEvent() {
     eventTime: '',
     eventLocation: '',
     eventCategory: '',
-    eventStatus: '',
+    eventStatus: EventStatus.Draft,
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [categories, setCategories] = useState<string[]>([]);
@@ -82,6 +83,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       endDate: new Date(formData.endDate).toISOString(),
       eventLocation: formData.eventLocation,
       eventCategory: formData.eventCategory,
+      eventStatus: formData.eventStatus,
     };
 
     await receiveFormData(formattedData, imageFile);
@@ -94,7 +96,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       eventTime: '',
       eventLocation: '',
       eventCategory: '',
-      eventStatus: '',
+      eventStatus: EventStatus.Draft,
     });
     setImageFile(null);
     
@@ -246,38 +248,27 @@ const handleSubmit = async (e: React.FormEvent) => {
         </div>
         <div>
           <label
-            htmlFor='eventLocation'
+            htmlFor='eventStatus'
             className='block text-sm font-medium text-white'
           >
-            Event Location:
+            Event Status:
           </label>
-          <input
-            type='text'
-            id='eventLocation'
-            name='eventLocation'
-            required
-            value={formData.eventLocation}
-            onChange={handleChange}
-            className='mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
-          />
-        </div>
-        {/* <div>
-        <select
+          <select
             id='eventStatus'
             name='eventStatus'
             required
-            value={formData.eventCategory}
+            value={formData.eventStatus}
             onChange={handleChange}
             className='mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
           >
-            <option value=''>Select a event Status</option>
-            {status.map((status) => (
+            <option value=''>Select a status</option>
+            {Object.values(EventStatus).map((status) => (
               <option key={status} value={status}>
-                {status}  
+                {status}
               </option>
             ))}
           </select>
-        </div> */}
+        </div>
 
         <button
           type='submit'

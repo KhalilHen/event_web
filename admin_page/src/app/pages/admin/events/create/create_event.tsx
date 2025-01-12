@@ -10,6 +10,7 @@ interface FormData {
   endDate: string | Date;
   eventLocation: string;
   eventCategory: string;
+  eventStatus: string;
 }
 
 export default async function receiveFormData(
@@ -56,6 +57,7 @@ export default async function receiveFormData(
       end_date: endDate, // ISO string
       location: formData.eventLocation,
       category: formData.eventCategory,
+      status: formData.eventStatus,
       image_url: imageUrl , // Can be null
 
     },
