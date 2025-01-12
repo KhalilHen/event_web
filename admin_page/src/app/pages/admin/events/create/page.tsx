@@ -13,8 +13,9 @@ export default function CreateEvent() {
     eventTime: '',
     eventLocation: '',
     eventCategory: '',
+    eventStatus: '',
   });
-
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
@@ -29,9 +30,26 @@ export default function CreateEvent() {
     fetchCategories();
   }, []);
 
+   
+
+  // const [status, setStatus] = useState<string[]>([]);
+
+  // useEffect(() => {
+  //   async function fetchCategories() {
+  //     const data = await retrieveCategories();
+  //     if (data) {
+  //       setCategories(
+  //         data.map((category: { title: string }) => category.title)
+  //       );
+  //     }
+  //   }
+  //   fetchCategories();
+  // }, []);
+
+
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement 
     >
   ) => {
     const { name, value } = e.target;
@@ -40,20 +58,31 @@ export default function CreateEvent() {
       [name]: value,
     }));
   };
+const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  if( e.target.files && e.target.files[0]) {
+
+    setImageFile(e.target.files[0]);
+    } else {
+
+      setImageFile(null);
+    }
+}
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     const formattedData = {
       ...formData,
       // startDate: new Date(formData.startDate),
       startDate: new Date(formData.startDate).toISOString(), // Converts to ISO string
       // endDate: new Date(formData.endDate),
       endDate: new Date(formData.endDate).toISOString(), // Converts to ISO string
-      eventTime: formData.eventTime + ':00', // Append seconds if needed
+      eventTime: formData.eventTime, 
 
       // eventTime: parseFloat(formData.eventTime),
     };
-    receiveFormData(formattedData);
+    receiveFormData(formattedData, imageFile);
     // receiveFormData(formattedData as FormData);
   };
 
@@ -102,7 +131,23 @@ export default function CreateEvent() {
             ))}
           </select>
         </div>
-
+        <div>
+          <label
+            htmlFor='eventImage'
+            className='block text-sm font-medium text-white'
+          >
+            Event Image:
+          </label>
+          <input
+            type='file'
+            id='eventImage'
+            name='eventImage'
+        
+            // value={formData.eventName}
+            onChange={handleImageChange}
+            className='mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
+          />
+        </div>
         <div>
           <label
             htmlFor='eventDescription'
@@ -155,12 +200,12 @@ export default function CreateEvent() {
           />
         </div>
         <div>
-          <label
+          {/* <label
             htmlFor='eventTime'
             className='block text-sm font-medium text-white'
           >
             Event Time:
-          </label>
+          </label> */}
 
           {/* <input
               type='time'
@@ -189,6 +234,23 @@ export default function CreateEvent() {
             className='mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
           />
         </div>
+        {/* <div>
+        <select
+            id='eventStatus'
+            name='eventStatus'
+            required
+            value={formData.eventCategory}
+            onChange={handleChange}
+            className='mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
+          >
+            <option value=''>Select a event Status</option>
+            {status.map((status) => (
+              <option key={status} value={status}>
+                {status}  
+              </option>
+            ))}
+          </select>
+        </div> */}
 
         <button
           type='submit'

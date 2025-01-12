@@ -1,22 +1,46 @@
 import { supabase } from '../../../../../../lib/supabaseClient';
-//TODO 
+
+
+
 interface FormData {
   eventName: string;
   eventDescription: string;
-  // startDate: Date;
-  // endDate: Date;
-  // eventTime: string;
+ 
   startDate: string | Date;
   endDate: string | Date;
-  // eventTime: string;
   eventLocation: string;
   eventCategory: string;
 }
 
 export default async function receiveFormData(
-  formData: FormData
+  formData: FormData,
+  imageFile: File | null
 ): Promise<void> {
+
+  
   // Ensure startDate and endDate are ISO 8601 strings
+  let imageUrl: string | null = null;
+  if(imageFile) {
+
+    const safeEventName = formData.eventName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    const fileName = `${safeEventName}_${imageFile.name}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+    .from('event_images') 
+    .upload(fileName, imageFile);
+
+  if (uploadError) {
+    console.error('Error uploading image:', uploadError);
+    return;
+  }
+
+  const filePath = `${uploadData.path}`;
+  if(filePath ) {
+
+    const {data: publicUrlData } = supabase.storage.from('event_images').getPublicUrl(filePath);
+    imageUrl = publicUrlData?.publicUrl ?? null;
+  }
+
+
   const startDate =
     typeof formData.startDate === 'string'
       ? formData.startDate
@@ -34,6 +58,8 @@ export default async function receiveFormData(
       end_date: endDate, // ISO string
       location: formData.eventLocation,
       category: formData.eventCategory,
+      image_url: imageUrl ?? null, // Can be null
+
     },
   ]);
 
@@ -42,4 +68,5 @@ export default async function receiveFormData(
   } else {
     console.log('Data inserted successfully');
   }
+}
 }
