@@ -17,6 +17,7 @@ export default function CreateEvent() {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [categories, setCategories] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -58,6 +59,7 @@ export default function CreateEvent() {
       [name]: value,
     }));
   };
+
 const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
   if( e.target.files && e.target.files[0]) {
@@ -69,26 +71,51 @@ const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     }
 }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError(null);
+  try {
     const formattedData = {
-      ...formData,
-      // startDate: new Date(formData.startDate),
-      startDate: new Date(formData.startDate).toISOString(), // Converts to ISO string
-      // endDate: new Date(formData.endDate),
-      endDate: new Date(formData.endDate).toISOString(), // Converts to ISO string
-      eventTime: formData.eventTime, 
-
-      // eventTime: parseFloat(formData.eventTime),
+      eventName: formData.eventName,
+      eventDescription: formData.eventDescription,
+      startDate: new Date(formData.startDate).toISOString(),
+      endDate: new Date(formData.endDate).toISOString(),
+      eventLocation: formData.eventLocation,
+      eventCategory: formData.eventCategory,
     };
-    receiveFormData(formattedData, imageFile);
-    // receiveFormData(formattedData as FormData);
-  };
+
+    await receiveFormData(formattedData, imageFile);
+    //reset
+    setFormData({
+      eventName: '',
+      eventDescription: '',
+      startDate: '',
+      endDate: '',
+      eventTime: '',
+      eventLocation: '',
+      eventCategory: '',
+      eventStatus: '',
+    });
+    setImageFile(null);
+    
+    alert('Event created successfully!');
+    
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Failed to create event');
+  }
+};
+    
+
 
   return (
     <div className='max-w-lg mx-auto p-4'>
       <h2 className='text-2xl font-bold mb-4'>Create Event</h2>
+      {error &&  (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+
+{error}
+        </div>
+      )}
       <form className='space-y-4' onSubmit={handleSubmit}>
         <div>
           <label
@@ -254,9 +281,11 @@ const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
         <button
           type='submit'
+
           className='w-full bg-indigo-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
         >
           Create Event
+          
         </button>
       </form>
     </div>

@@ -31,15 +31,13 @@ export default async function receiveFormData(
   if (uploadError) {
     console.error('Error uploading image:', uploadError);
     return;
-  }
+  }  else if(uploadData) {
 
-  const filePath = `${uploadData.path}`;
-  if(filePath ) {
-
-    const {data: publicUrlData } = supabase.storage.from('event_images').getPublicUrl(filePath);
+    const {data: publicUrlData} = supabase.storage.from('event_images').getPublicUrl(uploadData.path);
     imageUrl = publicUrlData?.publicUrl ?? null;
   }
 
+  }
 
   const startDate =
     typeof formData.startDate === 'string'
@@ -58,7 +56,7 @@ export default async function receiveFormData(
       end_date: endDate, // ISO string
       location: formData.eventLocation,
       category: formData.eventCategory,
-      image_url: imageUrl ?? null, // Can be null
+      image_url: imageUrl , // Can be null
 
     },
   ]);
@@ -68,5 +66,5 @@ export default async function receiveFormData(
   } else {
     console.log('Data inserted successfully');
   }
-}
+
 }
