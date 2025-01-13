@@ -1,13 +1,11 @@
 import { supabase } from '../../../../../../lib/supabaseClient';
 
-
-
 interface FormData {
   eventName: string;
   eventDescription: string;
- 
   startDate: string | Date;
   endDate: string | Date;
+  eventTime: string | Date;
   eventLocation: string;
   eventCategory: string;
   eventStatus: string;
@@ -19,7 +17,6 @@ export default async function receiveFormData(
   imageFile: File | null
 ): Promise<void> {
 
-  
   // Ensure startDate and endDate are ISO 8601 strings
   let imageUrl: string | null = null;
   if (imageFile) {
@@ -46,6 +43,13 @@ export default async function receiveFormData(
     typeof formData.endDate === 'string'
       ? formData.endDate
       : formData.endDate.toISOString();
+  const eventTime =
+    typeof formData.eventTime === 'string'
+      ? formData.eventTime
+      : formData.eventTime.toISOString().split('.')[0]; // Remove milliseconds
+
+  // Add seconds to the eventTime
+  const eventTimeWithSeconds = `${eventTime}:00`;
 
   const { error: insertError } = await supabase.from('events').insert([
     {
@@ -56,9 +60,9 @@ export default async function receiveFormData(
       location: formData.eventLocation,
       category: formData.eventCategory,
       status: formData.eventStatus,
-      image_url: imageUrl , // Can be null
+      time: eventTimeWithSeconds,
+      image_url: imageUrl, // Can be null
       high_light: formData.eventHighLight,
-
     },
   ]);
 
@@ -67,5 +71,4 @@ export default async function receiveFormData(
   } else {
     console.log('Data inserted successfully');
   }
-
 }

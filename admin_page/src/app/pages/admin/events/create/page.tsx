@@ -82,6 +82,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       eventDescription: formData.eventDescription,
       startDate: new Date(formData.startDate).toISOString(),
       endDate: new Date(formData.endDate).toISOString(),
+      eventTime: formData.eventTime,
       eventLocation: formData.eventLocation,
       eventCategory: formData.eventCategory,
       eventStatus: formData.eventStatus,
@@ -233,14 +234,14 @@ const handleSubmit = async (e: React.FormEvent) => {
           />
         </div>
         <div>
-          {/* <label
+          <label
             htmlFor='eventTime'
             className='block text-sm font-medium text-white'
           >
             Event Time:
-          </label> */}
+          </label> 
 
-          {/* <input
+           <input
               type='time'
               id='eventTime'
               name='eventTime'
@@ -248,7 +249,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               value={formData.eventTime}
               onChange={handleChange}
               className='mt-1 block w-full text-black border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2'
-            /> */}
+            />
         </div>
         <div>
           <label
